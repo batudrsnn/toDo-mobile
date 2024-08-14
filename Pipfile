@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 opencv-python = "*"
 djangorestframework = "*"
+mod-wsgi = "*"
+gunicorn = "*"
+dj-database-url = "*"
+mysqlclient = "*"
 
 [dev-packages]
 
