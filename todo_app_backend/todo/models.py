@@ -11,7 +11,7 @@ from django.utils.functional import cached_property
 """
 class appUser(AbstractUser):
     username = models.CharField(max_length=30, blank=False, unique=True)
-    is_admin = models.BooleanField(default=False)
+    #is_admin = models.BooleanField(default=False)
 
     
     def __str__(self):
