@@ -4,7 +4,7 @@ from .models import toDo, appUser
 class appUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = appUser
-        fields = ['username', 'is_admin']
+        fields = ['username', 'password']
 
 
 class toDoSerializer(serializers.ModelSerializer):

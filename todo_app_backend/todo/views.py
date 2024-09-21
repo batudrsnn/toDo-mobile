@@ -72,3 +72,8 @@ class appUserViewSet(viewsets.ModelViewSet):
         
         return super().create(request, *args, **kwargs)
     
+    def destroy(self, request, *args, **kwargs):
+        
+        return super().destroy(request, *args, **kwargs)
+    
+    """ http://127.0.0.1:8000/api/appUsers/9/   it gets id as parameter in url. deletes the user with id=9"""
