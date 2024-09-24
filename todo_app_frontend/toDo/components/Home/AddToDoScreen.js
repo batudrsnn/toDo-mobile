@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 
-export default function AddToDoScreen({ route, navigation }) {
-  const { addNewItem } = route.params; // Get the addNewItem function from params
+export default function AddToDoScreen({ navigation, addNewItem }) {
   const [taskTitle, setTaskTitle] = useState('');
   const [details, setDetails] = useState('');
   const [deadline, setDeadline] = useState('');

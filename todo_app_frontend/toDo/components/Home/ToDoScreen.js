@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, FlatList, Alert } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
-import initialTodoItems from './todoSampleData'; // Rename the imported todoItems
 
-export default function ToDoScreen() {
-  const [todoItems, setTodoItems] = useState(initialTodoItems); // Use initialTodoItems to set the state
-  
+export default function ToDoScreen({ todoItems, setTodoItems }) {
   // Remove a to-do item
   const removeToDoItem = (id) => {
     setTodoItems(todoItems.filter(item => item.id !== id));
