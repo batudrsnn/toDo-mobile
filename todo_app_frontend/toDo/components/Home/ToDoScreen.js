@@ -34,18 +34,44 @@ export default function ToDoScreen({ todoItems, setTodoItems }) {
   );
 
   // Render a single to-do item with swipeable delete action
-  const renderItem = ({ item }) => (
-    <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-      <View style={styles.item}>
-        <Text style={styles.title}>{item.taskTitle}</Text>
-        <Text style={styles.details}>{item.details}</Text>
-        <Text style={styles.completed}>
-          {item.completed ? 'Completed' : 'Not Completed'}
-        </Text>
-        <Text style={styles.deadline}>Deadline: {item.deadline}</Text>
-      </View>
-    </Swipeable>
-  );
+  const renderItem = ({ item }) => {
+    const deadlineLabel = getDeadlineLabel(item.deadline); // Get the deadline label
+  
+    return (
+      <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+        <View style={styles.item}>
+          <Text style={styles.title}>{item.taskTitle}</Text>
+          <Text style={styles.details}>{item.details}</Text>
+          <Text style={styles.completed}>
+            {item.completed ? 'Completed' : 'Not Completed'}
+          </Text>
+          <Text style={styles.deadline}>
+            Deadline: {deadlineLabel}
+          </Text>
+        </View>
+      </Swipeable>
+    );
+  };
+  
+  /* Check deadline date weather it's tomorrow or today */
+  const getDeadlineLabel = (deadline) => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+  
+    const deadlineDate = new Date(deadline);
+    today.setHours(0, 0, 0, 0);
+    tomorrow.setHours(0, 0, 0, 0);
+    deadlineDate.setHours(0, 0, 0, 0);
+  
+    if (deadlineDate.getTime() === today.getTime()) {
+      return 'Today';
+    } else if (deadlineDate.getTime() === tomorrow.getTime()) {
+      return 'Tomorrow';
+    } else {
+      return deadline;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -64,7 +90,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   item: {
-    backgroundColor: '#81E8F9',
+    backgroundColor: '#F2BF91',
     padding: 20,
     marginVertical: 8,
     borderRadius: 10,
