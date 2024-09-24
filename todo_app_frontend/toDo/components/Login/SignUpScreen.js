@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  Alert,
 } from 'react-native';
 
 export default function SignUpScreen({ navigation }) {
@@ -19,6 +20,47 @@ export default function SignUpScreen({ navigation }) {
 
   const bgImage = require('../../assets/background.png');
   const logoImage = require('../../assets/budgie.png');
+
+  const handleSignUp = async () => {
+    if (password !== passwordConfirm) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
+
+    /*
+    const requestBody = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+    */
+
+    try {
+      const response = await fetch('http://161.35.151.187:8000/api/appUsers/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: firstName,
+          password: password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        Alert.alert("Success", "Sign Up Successful!");
+        navigation.navigate('Login');
+      } else {
+        Alert.alert("Error", result.message || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Sign-up error:", error);
+      Alert.alert("Error", "Unable to complete sign-up. Please try again later.");
+    }
+  };
 
   return (
     <ImageBackground
@@ -81,7 +123,7 @@ export default function SignUpScreen({ navigation }) {
               onPress={() => navigation.goBack()}>
               <Text style={styles.loginButtonText}>Back</Text>
             </Pressable>
-            <Pressable style={styles.loginButton}>
+            <Pressable style={styles.loginButton} onPress={handleSignUp}>
               <Text style={styles.loginButtonText}>Sign Up</Text>
             </Pressable>
           </View>
