@@ -14,7 +14,7 @@ class appUser(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     
-    REQUIRED_FIELDS = ['USERNAME_FIELD', 'password', 'email']
+    REQUIRED_FIELDS = ['password', 'email']
     
     def save(self, *args, **kwargs):
       if not self.password:
@@ -33,7 +33,7 @@ class appUser(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField('todo.appUser', on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50, blank=False)
-    surname = models.CharField(max_length=5, blank=False)
+    surname = models.CharField(max_length=50, blank=False)
     photo = models.ImageField(default='default.jpg', upload_to='profile_images')
     
     
