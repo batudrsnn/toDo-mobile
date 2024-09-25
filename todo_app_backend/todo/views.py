@@ -5,6 +5,7 @@ from .serializers import toDoSerializer, appUserSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.exceptions import PermissionDenied
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class toDoViewSet(viewsets.ModelViewSet):
     queryset = toDo.objects.all()
@@ -77,3 +78,7 @@ class appUserViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
     
     """ http://127.0.0.1:8000/api/appUsers/9/   it gets id as parameter in url. deletes the user with id=9"""
+    
+    
+    
+    

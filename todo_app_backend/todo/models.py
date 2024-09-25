@@ -6,21 +6,24 @@ from django.core.exceptions import ValidationError
 
 from django.utils.functional import cached_property
 
-"""
-  APPUSER CREATE POST API ENDPOINT
-  
-"""
+
 class appUser(AbstractUser):
     username = models.CharField(max_length=30, blank=False, unique=True)
-    password = models.CharField(max_length=30, blank=False)
-    #is_admin = models.BooleanField(default=False)
-
+    password = models.CharField(max_length=100, blank=False)
+    email = models.EmailField(blank=False, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    
+    REQUIRED_FIELDS = ['USERNAME_FIELD', 'password', 'email']
     
     def save(self, *args, **kwargs):
       if not self.password:
         raise ValidationError("Password cannot be empty.")
+      elif not self.email:
+        raise ValidationError("Email cannot be empty.")
       
       super(appUser,self).save(*args, **kwargs)
+     
      
      
     def __str__(self):
