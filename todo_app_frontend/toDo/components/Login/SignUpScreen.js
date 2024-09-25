@@ -12,8 +12,7 @@ import {
 } from 'react-native';
 
 export default function SignUpScreen({ navigation }) {
-  const [firstName, onChangeFirstName] = useState('');
-  const [lastName, onChangeLastName] = useState('');
+  const [username, onChangeUserName] = useState('');
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');
   const [passwordConfirm, onChangePasswordConfirm] = useState('');
@@ -43,8 +42,9 @@ export default function SignUpScreen({ navigation }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: firstName,
+          username: username,
           password: password,
+          email: email
         }),
       });
 
@@ -77,17 +77,9 @@ export default function SignUpScreen({ navigation }) {
           <Text style={styles.headerText}>Sign Up</Text>
           <TextInput
             style={styles.inputBox}
-            value={firstName}
-            onChangeText={onChangeFirstName}
-            placeholder={'First Name'}
-            placeholderTextColor={'#8C8C8C'}
-            keyboardType={'default'}
-          />
-          <TextInput
-            style={styles.inputBox}
-            value={lastName}
-            onChangeText={onChangeLastName}
-            placeholder={'Last Name'}
+            value={username}
+            onChangeText={onChangeUserName}
+            placeholder={'Username'}
             placeholderTextColor={'#8C8C8C'}
             keyboardType={'default'}
           />
