@@ -6,7 +6,7 @@ import ToDoScreen from './ToDoScreen';
 import ProfileScreen from './ProfileScreen';
 import AddToDoScreen from './AddToDoScreen';
 import { Button } from 'react-native';
-import initialTodoItems from './todoSampleData'; // Replace with your actual data source
+import initialTodoItems from './todoSampleData';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -14,7 +14,6 @@ const Stack = createStackNavigator();
 function ToDoStack() {
   const [todoItems, setTodoItems] = useState(initialTodoItems);
 
-  // Function to add a new to-do item
   const addNewItem = (newTask) => {
     setTodoItems((prevItems) => [...prevItems, newTask]);
   };
