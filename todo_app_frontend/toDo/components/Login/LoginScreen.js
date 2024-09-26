@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
-  const [email, onChangeEmail] = useState('');
+  const [username, onChangeUsername] = useState('');
   const [password, onChangePassword] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,20 +20,20 @@ export default function LoginScreen({ navigation }) {
   const logoImage = require('../../assets/budgie.png');
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    if (!username || !password) {
       Alert.alert("Error", "Please fill in both fields");
       return;
     }
 
     try {
       setLoading(true);
-      const response = await fetch('https://your-api-endpoint.com/login', {
+      const response = await fetch('http://161.35.151.187:8000/api/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email,
+          username: username,
           password: password,
         }),
       });
@@ -41,9 +41,9 @@ export default function LoginScreen({ navigation }) {
       const result = await response.json();
 
       if (response.ok) {
-        Alert.alert('Success', 'Login Successful!');
+        // Alert.alert('Success', 'Login Successful!');
         // After login go to home
-        navigation.navigate('HomeScreen');
+        navigation.navigate('NavBarController');
       } else {
         Alert.alert('Login Failed', result.message || 'Invalid credentials');
       }
@@ -70,11 +70,11 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.headerText}>Login</Text>
           <TextInput
             style={styles.inputBox}
-            value={email}
-            onChangeText={onChangeEmail}
-            placeholder={'Email Address'}
+            value={username}
+            onChangeText={onChangeUsername}
+            placeholder={'Username'}
             placeholderTextColor={'#8C8C8C'}
-            keyboardType={'email-address'}
+            keyboardType={'default'}
           />
           <TextInput
             style={styles.inputBox}

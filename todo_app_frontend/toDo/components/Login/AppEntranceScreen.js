@@ -16,6 +16,7 @@ import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import NavBarControllerScreen from '../Home/NavBarControllerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -71,6 +72,9 @@ export default function AppEntranceScreen() {
 
             {/* SignUp screen */}
             <Stack.Screen name="SignUp" component={SignUpScreen} />
+            
+            {/* NavBarController screen (new screen after login) */}
+            <Stack.Screen name="NavBarController" component={NavBarControllerScreen} />
           </Stack.Navigator>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

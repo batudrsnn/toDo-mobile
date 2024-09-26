@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import ToDoScreen from './ToDoScreen';
@@ -25,6 +24,7 @@ function ToDoStack() {
         name="ToDoMain"
         options={({ navigation }) => ({
           title: 'To-Do List',
+          headerLeft: null,
           headerRight: () => (
             <Button
               onPress={() => navigation.navigate('AddToDo')}
@@ -50,20 +50,18 @@ function ToDoStack() {
 
 export default function NavBarControllerScreen() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        {/* Tab.Screen's header is disabled for the ToDoStack */}
-        <Tab.Screen
-          name="ToDoTab"
-          component={ToDoStack}
-          options={{ headerShown: false, tabBarLabel: 'To Do' }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{ tabBarLabel: 'Profile' }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator>
+      {/* Tab.Screen's header is disabled for the ToDoStack */}
+      <Tab.Screen
+        name="ToDoTab"
+        component={ToDoStack}
+        options={{ headerShown: false, tabBarLabel: 'To Do' }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ tabBarLabel: 'Profile' }}
+      />
+    </Tab.Navigator>
   );
 }

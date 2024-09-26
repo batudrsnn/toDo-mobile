@@ -7,7 +7,7 @@ import NavBarControllerScreen from './components/Home/NavBarControllerScreen';
 export default function App() {
   return (
     <View style={styles.container}>
-      <NavBarControllerScreen />
+      <AppEntranceScreen />
     </View>
   );
 }
