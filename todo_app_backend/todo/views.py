@@ -38,9 +38,9 @@ class toDoViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         user = self.request.user
         
-        if instance.owner == user or user.is_superuser:
+        if instance.user_id == user.id or user.is_superuser:
             self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK)
         else:
             raise PermissionDenied("You do not have permission to delete this toDo.")
         
