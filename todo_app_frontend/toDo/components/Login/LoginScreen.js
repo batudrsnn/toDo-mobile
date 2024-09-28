@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { jwtDecode } from 'jwt-decode';
 
 export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = useState('');
@@ -20,9 +21,98 @@ export default function LoginScreen({ navigation }) {
   const bgImage = require('../../assets/background.png');
   const logoImage = require('../../assets/budgie.png');
 
+  // Check if token is expired
+  const isTokenExpired = (token) => {
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      
+      // Convert timestamps to readable format
+      const currentDateTime = new Date(currentTime * 1000).toLocaleString();
+      const expirationDateTime = new Date(decodedToken.exp * 1000).toLocaleString();
+      
+      console.log('Current Time:', currentDateTime);
+      console.log('Decoded Token Expiration Time:', expirationDateTime);
+      console.log('Is Token Expired:', decodedToken.exp < currentTime);
+      
+      return decodedToken.exp < currentTime;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return true; // If token is invalid or decoding fails, assume it's expired
+    }
+  };  
+
+  // Refresh the access token
+  const refreshAccessToken = async () => {
+    const refreshToken = await SecureStore.getItemAsync('refreshToken');
+    
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    try {
+      console.log("Refreshing acces token..");
+      const response = await fetch('http://161.35.151.187:8000/api/token/refresh/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          refresh: refreshToken,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        await SecureStore.setItemAsync('accessToken', result.access);
+        console.log("Acces token refreshed!");
+        return result.access;
+      } else {
+        throw new Error('Failed to refresh token');
+      }
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      throw error;
+    }
+  };
+
+  // Get the access token (refresh it if expired)
+  const getAccessToken = async () => {
+    let accessToken = await SecureStore.getItemAsync('accessToken');
+
+    if (!accessToken || isTokenExpired(accessToken)) {
+      try {
+        console.log("Acces token expired.");
+        accessToken = await refreshAccessToken();
+      } catch (error) {
+        console.error('Token refresh failed, please log in again');
+        throw error;
+      }
+    }
+
+    return accessToken;
+  };
+
+  // Check for authentication when the component mounts
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = await getAccessToken();
+        if (token) {
+          // If token is valid, navigate to the home screen
+          navigation.navigate('NavBarController');
+        }
+      } catch (error) {
+        console.log('User needs to login');
+      }
+    };
+    checkAuth();
+  }, []);
+
   const handleLogin = async () => {
     if (!username || !password) {
-      Alert.alert("Error", "Please fill in both fields");
+      Alert.alert('Error', 'Please fill in both fields');
       return;
     }
 
@@ -40,14 +130,15 @@ export default function LoginScreen({ navigation }) {
       });
 
       const result = await response.json();
-      
-      if (response.ok) {
-        const accessToken = result.access;
-        
-        // Store the token securely
-        await SecureStore.setItemAsync('accessToken', accessToken);
 
-        // After login go to home
+      if (response.ok) {
+        const { access, refresh } = result;
+
+        // Store the access and refresh tokens securely
+        await SecureStore.setItemAsync('accessToken', access);
+        await SecureStore.setItemAsync('refreshToken', refresh);
+
+        // Navigate to the home screen
         navigation.navigate('NavBarController');
       } else {
         Alert.alert('Login Failed', result.message || 'Invalid credentials');
@@ -64,10 +155,12 @@ export default function LoginScreen({ navigation }) {
     <ImageBackground
       source={bgImage}
       resizeMode="cover"
-      style={styles.backgroundImage}>
+      style={styles.backgroundImage}
+    >
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
-        keyboardShouldPersistTaps="handled">
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.container}>
           <View style={styles.logoContainer}>
             <Image style={styles.logo} source={logoImage} />
@@ -93,13 +186,15 @@ export default function LoginScreen({ navigation }) {
           <View style={styles.loginButtonWrapper}>
             <Pressable
               style={styles.loginButton}
-              onPress={() => navigation.goBack()}>
+              onPress={() => navigation.goBack()}
+            >
               <Text style={styles.loginButtonText}>Back</Text>
             </Pressable>
             <Pressable
               style={[styles.loginButton, loading ? styles.disabledButton : null]}
               onPress={handleLogin}
-              disabled={loading}>
+              disabled={loading}
+            >
               <Text style={styles.loginButtonText}>
                 {loading ? 'Logging In...' : 'Login'}
               </Text>
