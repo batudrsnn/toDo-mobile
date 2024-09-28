@@ -104,7 +104,7 @@ export default function ToDoScreen({ todoItems, setTodoItems }) {
       >
         <View style={[styles.item, { backgroundColor: itemBackgroundColor }]}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>{item.taskTitle}</Text>
+            <Text style={styles.title}>{item.task_title}</Text>
             <Text style={styles.details}>{item.details}</Text>
             <Text style={styles.deadline}>
               Deadline: {deadlineLabel}
@@ -161,8 +161,8 @@ export default function ToDoScreen({ todoItems, setTodoItems }) {
             <TextInput
               style={styles.input}
               placeholder="Task Title"
-              value={editableItem?.taskTitle}
-              onChangeText={(text) => setEditableItem({ ...editableItem, taskTitle: text })}
+              value={editableItem?.task_title}
+              onChangeText={(text) => setEditableItem({ ...editableItem, task_title: text })}
             />
             <TextInput
               style={styles.input}

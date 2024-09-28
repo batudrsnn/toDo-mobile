@@ -10,6 +10,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 export default function LoginScreen({ navigation }) {
   const [username, onChangeUsername] = useState('');
@@ -39,9 +40,13 @@ export default function LoginScreen({ navigation }) {
       });
 
       const result = await response.json();
-
+      
       if (response.ok) {
-        // Alert.alert('Success', 'Login Successful!');
+        const accessToken = result.access;
+        
+        // Store the token securely
+        await SecureStore.setItemAsync('accessToken', accessToken);
+
         // After login go to home
         navigation.navigate('NavBarController');
       } else {
