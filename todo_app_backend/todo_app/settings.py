@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'tododb',
         'USER': 'root',
         'PASSWORD': 'admin',
-        'HOST':'161.35.151.187',
+        'HOST':'localhost',
         'PORT':'3306',
     }
 }
