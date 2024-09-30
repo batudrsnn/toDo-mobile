@@ -9,6 +9,7 @@ pillow = "*"
 djangorestframework = "*"
 gunicorn = "*"
 djangorestframework-simplejwt = "*"
+mysqlclient = "*"
 
 [dev-packages]
 
