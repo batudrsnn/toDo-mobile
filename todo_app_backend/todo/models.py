@@ -58,7 +58,7 @@ class toDo(models.Model):
   
   """
     
-  creator = models.ForeignKey('todo.appUser', on_delete=models.CASCADE, related_name='created_todos')
+  creator = models.ForeignKey('todo.appUser', on_delete=models.CASCADE, null=False, related_name='created_todos')
   user = models.ForeignKey('todo.appUser', on_delete=models.CASCADE)
   task_title = models.CharField(max_length=100, default="Enter a title..")
   details = models.CharField(max_length=1000, default="Enter a detail..")
