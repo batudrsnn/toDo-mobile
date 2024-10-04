@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from .models import toDo, appUser
-from .serializers import toDoSerializer, appUserSerializer
+from .serializers import *
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from rest_framework.decorators import action
 
 class toDoViewSet(viewsets.ModelViewSet):
     queryset = toDo.objects.all()
@@ -24,7 +24,7 @@ class toDoViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         
-        data['user'] = request.user.id
+        data['creator'] = request.creator.id
         
         serializer = self.get_serializer(data=data)
         
@@ -82,3 +82,19 @@ class appUserViewSet(viewsets.ModelViewSet):
     
     
     
+class TeamViewSet(viewsets.ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=True, methods=['post'])
+    def add_member(self, request, pk=None):
+        """
+        Custom endpoint to add a user to a team.
+        Example: POST /teams/{id}/add_member/
+        """
+        team = self.get_object()
+        user = appUser.objects.get(pk=request.data['user_id'])
+        team.members.add(user)
+        team.save()
+        return Response({"status": "member added"})

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 router = DefaultRouter()
 router.register(r'todos', toDoViewSet)
 router.register(r'appUsers', appUserViewSet)
-
+router.register(r'teams', TeamViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),  # Include the router-generated URLs
