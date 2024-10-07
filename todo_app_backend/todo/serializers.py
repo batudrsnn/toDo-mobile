@@ -28,9 +28,9 @@ class TeamSerializer(serializers.ModelSerializer):
 
 
 class toDoSerializer(serializers.ModelSerializer):
-    creator =  serializers.PrimaryKeyRelatedField(queryset=appUser.objects.all(), required=True)
-    team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all(), required=False)
-    personal = serializers.PrimaryKeyRelatedField(queryset=appUser.objects.all(), required=False)
+    #creator =  serializers.PrimaryKeyRelatedField(queryset=appUser.objects.all(), required=True)
+    #team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all(), required=False)
+    #personal = serializers.PrimaryKeyRelatedField(queryset=appUser.objects.all(), required=False)
 
     class Meta:
         model = toDo
