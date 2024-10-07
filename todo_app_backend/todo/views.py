@@ -24,7 +24,7 @@ class toDoViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         
-        data['creator'] = request.creator.id
+        data['creator'] = request.user.id
         
         serializer = self.get_serializer(data=data)
         
