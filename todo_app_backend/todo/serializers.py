@@ -24,7 +24,7 @@ class TeamSerializer(serializers.ModelSerializer):
     members = appUserSerializer(many=True, read_only=True) 
     class Meta:
         model = Team
-        fields = ['id', 'name', 'admin', 'members']
+        fields = ['name', 'admin', 'members']
 
 
 class toDoSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class toDoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = toDo
-        fields = ['id', 'task_title', 'details', 'completed', 'deadline', 'creator', 'team', 'personal']
+        fields = ['task_title', 'details', 'completed', 'deadline', 'creator', 'team', 'personal']
 
     #def create(self, validated_data):
     #    request = self.context.get('request')
