@@ -24,7 +24,7 @@ class toDoViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         
-        data['creator'] = request.user.id
+        #data['creator'] = request.creator.id
         
         serializer = self.get_serializer(data=data)
         
@@ -87,6 +87,9 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        
+        return super().create(request, *args, **kwargs)
     @action(detail=True, methods=['post'])
     def add_member(self, request, pk=None):
         """

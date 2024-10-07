@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 
 
+
 class appUser(AbstractUser):
     username = models.CharField(max_length=30, blank=False, unique=True)
     password = models.CharField(max_length=100, blank=False)
@@ -30,6 +31,30 @@ class appUser(AbstractUser):
      
     def __str__(self):
         return self.username
+      
+      
+class Team(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Optional team admin - one user can be assigned as the admin of the team
+    admin = models.ForeignKey('todo.appUser', on_delete=models.CASCADE, blank=False, null=True, related_name='admin_teams')
+
+    def __str__(self):
+        return self.name
+
+
+class TeamMembership(models.Model):
+    user = models.ForeignKey('todo.appUser', on_delete=models.CASCADE)
+    team = models.ForeignKey('todo.Team', on_delete=models.CASCADE)
+    joined_at = models.DateTimeField(auto_now_add=True)
+    role = models.CharField(max_length=20, choices=[('member', 'Member'), ('admin', 'Admin')], default='member')
+
+    def __str__(self):
+        return f'{self.user.username} in {self.team.name}'
+      
+      
+
 
 
 class Profile(models.Model):
@@ -59,7 +84,8 @@ class toDo(models.Model):
   """
     
   creator = models.ForeignKey('todo.appUser', on_delete=models.CASCADE, null=False, related_name='created_todos')
-  user = models.ForeignKey('todo.appUser', on_delete=models.CASCADE)
+  personal = models.ForeignKey('todo.appUser', on_delete=models.CASCADE, null=True, blank=True, related_name='personal_todo')
+  team = models.ForeignKey('todo.Team', on_delete=models.CASCADE, blank=True, null=True, related_name='team_todos')
   task_title = models.CharField(max_length=100, default="Enter a title..")
   details = models.CharField(max_length=1000, default="Enter a detail..")
   completed = models.BooleanField(default=False)
@@ -81,23 +107,7 @@ class toDo(models.Model):
      
      
 
-class Team(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    # Optional team admin - one user can be assigned as the admin of the team
-    admin = models.ForeignKey('todo.appUser', on_delete=models.SET_NULL, null=True, related_name='admin_teams')
 
-    def __str__(self):
-        return self.name
     
     
 
-class TeamMembership(models.Model):
-    user = models.ForeignKey('todo.appUser', on_delete=models.CASCADE)
-    team = models.ForeignKey('todo.Team', on_delete=models.CASCADE)
-    joined_at = models.DateTimeField(auto_now_add=True)
-    role = models.CharField(max_length=20, choices=[('member', 'Member'), ('admin', 'Admin')], default='member')
-
-    def __str__(self):
-        return f'{self.user.username} in {self.team.name}'
