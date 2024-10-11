@@ -104,7 +104,7 @@ export default function ToDoScreen({ todoItems, setTodoItems }) {
       >
         <View style={[styles.item, { backgroundColor: itemBackgroundColor }]}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>{item.task_title}</Text>
+            <Text style={styles.title}>{item.taskTitle}</Text>
             <Text style={styles.details}>{item.details}</Text>
             <Text style={styles.deadline}>
               Deadline: {deadlineLabel}
